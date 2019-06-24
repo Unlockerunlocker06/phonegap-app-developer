@@ -1,69 +1,157 @@
 <!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <title>PhoneGap Developer App</title>
-    <link rel="stylesheet" href="css/app.css" type="text/css"/>
-    <script src="js/ms-viewport.js"></script>
-</head>
-<body ontouchstart="">
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+		
+		<link rel="stylesheet" type="text/css" href="css/pure-min.css" />
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>Unlocker</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>Unlocker Debug2</h1>
+            <!--<div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Phone</p>
+                <p class="event received">Phone is Ready</p>
+            </div>-->
+ 
+			<table id="blestatustable">
+				<tr>
+				<td id="ble1" class="bleinactive">&nbsp;</td><td id="ble2" class="bleinactive">&nbsp;</td><td id="ble3" class="bleinactive">&nbsp;</td>
+				<td id="ble4" class="bleinactive">&nbsp;</td><td id="ble5" class="bleinactive">&nbsp;</td><td id="ble6" class="bleinactive">&nbsp;</td>
+				<td id="ble7" class="bleinactive">&nbsp;</td><td id="ble8" class="bleinactive">&nbsp;</td><td id="ble9" class="bleinactive">&nbsp;</td>
+				</tr>
+			</table>
+			
+			<br>
+			<table style="width:100%; margin-bottom:10px;">
+				<!--
+				<tr>
+					<td class="SQBTN highlight">CONNECT TO UNLOCKER</td>
+				</tr>
+			
+				<tr style="height:5px;"></tr>
+				-->
+				<tr>
+					<td class="pass SQBTN highlight">PASSCODE</td>
+					<td style="width:10px;"></td>
+					<td rowspan="3" style="width:40px;" id="passclearbutton" class="SQBTN highlight">CLEAR</td>
+				</tr>
+				
+				<tr style="height:5px;"></tr>
+				
+				<tr>
+					<td class="pass SQBTN highlight"><span id="passcode">&nbsp;</span></td>
+					<td style="width:10px;">&nbsp;</td>
+		
+				</tr>
+			</table>
+			
+			
+			<div style="height:70px;"><!-- newspacer is GONE -->
+			<table style="width:100%;" id="newcodedisplay"><!-- only shows up if the CHANGE PASSCODE option is selected -->
 
-    <div class="container">
-        <div class="inner">
+				<tr>
+					<td class="newpass SQBTN unhighlight">NEW PASSCODE</td>
+					<td style="width:10px;"></td>
+					<td rowspan="3" style="width:40px;" id="newpassclearbutton" class="SQBTN highlight">CLEAR</td>
+				</tr>
+				
+				<tr style="height:5px;"></tr>
+				
+				<tr>
+					<td class="newpass SQBTN unhighlight"><span id="newpasscode">&nbsp;</span></td>
+					<td style="width:10px;">&nbsp;</td>
+				</tr>
+			</table>
+			</div>
 
-            <article id="bot">
-
-                <div class="shadow"></div>
-
-                <div class="monitor">
-                    <div class="cover"></div>
-                    <form id="login-form" class="faded hidden" novalidate>
-                        <label>&gt; Server Address</label>
-                        <input type="url" id="address" class="offset"></input>
-                        <input type="submit" value="Connect" class="offset"></input>
-                        <label></label>
-                        <label class="info">3-finger tap goes home</label>
-                        <label class="info">4-finger tap refreshes</label>
-                    </form>
-                    <div class="visor pulse">
-                        <label>Loading...</label>
-                        <div class="eye left faded"></div>
-                        <div class="eye right faded"></div>
-                    </div>
-                </div>
-
-                <div class="panel top">
-                    <div class="panel visor-cover"></div>
-                </div>
-
-                <div class="panel bottom"></div>
-
-                <div class="footer faded">
-                    <p>
-                        Share usage data
-                        <input type="checkbox" id="analytic-checkbox" class="tgl tgl-light" />
-                        <label for="analytic-checkbox" class="tgl-btn"></label>
-                    </p>
-                    <a href="http://www.adobe.com/special/misc/terms.html" target="_system">Terms</a>
-                    &amp;
-                    <a href="http://www.adobe.com/special/misc/privacy.html" target="_system">Privacy</a>
-                    <div id="version">
-                        %PHONEGAP_APP_VERSION%
-                    </div>
-                </div>
-            </article>
-
-
+			<table class="buttontable" style="width:100%">
+				<tr>
+					<td id="1button" class="button"><div class="highlight">1</div></td>
+					<td id="2button" class="button"><div class="highlight">2</div></td>
+					<td id="3button" class="button"><div class="highlight">3</div></td>
+				</tr>
+				<tr>
+					<td id="4button" class="button"><div class="highlight">4</div></td>
+					<td id="5button" class="button"><div class="highlight">5</div></td>
+					<td id="6button" class="button"><div class="highlight">6</div></td>
+				</tr>
+				<tr>
+					<td id="7button" class="button"><div class="highlight">7</div></td>
+					<td id="8button" class="button"><div class="highlight">8</div></td>
+					<td id="9button" class="button"><div class="highlight">9</div></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td id="0button" class="button"><div class="highlight">0</div></td>
+					<td id="backspacebutton" class="button"><div class="highlight">&lt;--</div></td>
+				</tr>
+			</table>
+			
+			<br>
+				
+			<table style="width:100%">
+				<tr>
+					<td>MODE:</td>
+					<td id="unlockbutton" class="SQBTN highlight">UNLOCK</td>
+					<td>/</td>
+					<td id="changebutton" class="SQBTN unhighlight">CHANGE <br> PASSCODE</td> <!-- Highlight one of these depending on mode -->
+				</tr>
+				<tr><td>&nbsp;</td></tr>
+				<tr>
+					<td id="okbutton" class="SQBTN highlight">OK</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td id="cancelbutton" class="SQBTN highlight">CANCEL</td>
+				</tr>
+				<!--debug stuff-->
+				<tr><td>&nbsp;</td></tr>
+				<tr>
+					<td><div id="debug1">timer</div></td>
+					<td><div id="debug2">d2</div></td>
+					<td><div id="debug3">d3</div></td>
+					<td><div id="debug4"><a href="diag.html">d4</a></div></td>
+				</tr>
+				<tr><td colspan="4"><div id="debugl">dlong</div></td></tr>
+				<tr><td colspan="4"><div id="output">&nbsp;</div></td></tr><!--END DEBUG STUFF-->
+			</table>
+			
+			
         </div>
-    </div>
-    <script src="cordova.js"></script>
-    <script src="js/zepto.min.js"></script>
-    <script src="js/nacl-util.min.js"></script>
-    <script src="js/nacl-fast.min.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/deploy.js"></script>
-    <script src="js/analytic.js"></script>
-</body>
+        <script type="text/javascript" src="cordova.js"></script>
+		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+		
+    </body>
 </html>
